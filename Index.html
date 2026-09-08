@@ -15,17 +15,118 @@
   <div class="header-row">
     <a class="brand" href="#top">
       <img src="https://www.derodeschaar.nl/media/07/02/67/1764836099/Crob.png?ts=1764836099" alt="De Rode Schaar">
-      <span>De Rode Schaar</span>
     </a>
-    <nav class="main-nav">
-      <a href="https://www.derodeschaar.nl/nieuwe-machines/" target="_blank" rel="noopener">Machines</a>
-      <a href="https://www.derodeschaar.nl/occassion/" target="_blank" rel="noopener">Occasion</a>
-      <a href="https://www.derodeschaar.nl/reparatie-onderhoud/" target="_blank" rel="noopener">Reparatie &amp; onderhoud</a>
-      <a href="https://www.derodeschaar.nl/kledingreparatie-stomerij/" target="_blank" rel="noopener">Kledingreparatie</a>
-    </nav>
-    <a class="header-cta" href="https://www.derodeschaar.nl/offerte-aanvragen/" target="_blank" rel="noopener">Offerte aanvragen</a>
+    <div class="header-right">
+      <div class="nav-wrap" id="mobile-nav">
+        <nav class="main-nav">
+          <a href="https://www.derodeschaar.nl/nieuwe-machines/" target="_blank" rel="noopener">Machines</a>
+          <a href="https://www.derodeschaar.nl/occassion/" target="_blank" rel="noopener">Occasion</a>
+          <a href="https://www.derodeschaar.nl/reparatie-onderhoud/" target="_blank" rel="noopener">Reparatie &amp; onderhoud</a>
+          <a href="https://www.derodeschaar.nl/kledingreparatie-stomerij/" target="_blank" rel="noopener">Kledingreparatie</a>
+        </nav>
+        <a class="header-cta" href="https://www.derodeschaar.nl/offerte-aanvragen/" target="_blank" rel="noopener">Offerte aanvragen</a>
+      </div>
+      <div class="header-actions">
+        <button class="cart-toggle" id="cartToggle" type="button" aria-label="Winkelwagen" aria-expanded="false" aria-controls="cartPanel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6"></path>
+            <circle cx="9.5" cy="20" r="1.4"></circle>
+            <circle cx="17" cy="20" r="1.4"></circle>
+          </svg>
+          <span class="cart-count" id="cartCount" hidden>0</span>
+        </button>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="mobile-nav">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </button>
+      </div>
+    </div>
   </div>
 </header>
+
+<div class="cart-overlay" id="cartOverlay" hidden></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-panel-head">
+    <h3 id="cartPanelTitle">Winkelmandje</h3>
+    <button class="cart-close" id="cartClose" type="button" aria-label="Sluiten">&times;</button>
+  </div>
+
+  <!-- Stap 1: winkelmandje -->
+  <div class="cart-step" id="cartStepCart">
+    <div class="cart-items" id="cartItems"></div>
+    <p class="cart-empty" id="cartEmpty">Je winkelmandje is leeg.</p>
+    <div class="cart-panel-foot" id="cartFoot" hidden>
+      <div class="cart-total-row"><span>Subtotaal</span><span id="cartTotal">€ 0,00</span></div>
+      <button type="button" class="btn-checkout" id="toCheckoutBtn">Verder naar afrekenen</button>
+    </div>
+  </div>
+
+  <!-- Stap 2: afrekenen — BACKEND: dit formulier levert de ordergegevens; zie submitOrder() in het script -->
+  <div class="cart-step" id="cartStepCheckout" hidden>
+    <form id="checkoutForm" novalidate>
+      <div class="checkout-section">
+        <h4>Contactgegevens</h4>
+        <label>E-mailadres<input type="email" name="email" autocomplete="email" required></label>
+        <label>Naam<input type="text" name="customerName" autocomplete="name" required></label>
+        <label>Telefoon<input type="tel" name="phone" autocomplete="tel"></label>
+      </div>
+      <div class="checkout-section">
+        <h4>Bezorgadres</h4>
+        <label>Straat en huisnummer<input type="text" name="address" autocomplete="street-address" required></label>
+        <div class="checkout-row">
+          <label>Postcode<input type="text" name="postcode" autocomplete="postal-code" required></label>
+          <label>Plaats<input type="text" name="city" autocomplete="address-level2" required></label>
+        </div>
+        <label>Land
+          <select name="country" autocomplete="country">
+            <option value="NL" selected>Nederland</option>
+            <option value="BE">België</option>
+          </select>
+        </label>
+      </div>
+      <div class="checkout-section">
+        <h4>Betaalmethode</h4>
+        <div class="payment-methods">
+          <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="ideal" checked>
+            <img src="https://www.derodeschaar.nl/media/f5/3d/53/1761642220/ideal-icon.svg?ts=1761642220" alt="">
+            <span>iDEAL</span>
+          </label>
+          <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="bancontact">
+            <img src="https://www.derodeschaar.nl/media/06/37/7a/1761642220/bancontact-icon.svg?ts=1761642220" alt="">
+            <span>Bancontact</span>
+          </label>
+          <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="card">
+            <img src="https://www.derodeschaar.nl/media/de/bc/0b/1761642220/creditcard-icon.svg?ts=1761642220" alt="">
+            <span>Creditcard</span>
+          </label>
+          <label class="payment-method">
+            <input type="radio" name="paymentMethod" value="klarna">
+            <img src="https://www.derodeschaar.nl/media/8c/95/94/1761642221/klarna-icon.svg?ts=1761642221" alt="">
+            <span>Klarna</span>
+          </label>
+        </div>
+      </div>
+      <div class="checkout-summary" id="checkoutSummary"></div>
+      <div class="checkout-actions">
+        <button type="button" class="btn-back" id="toCartBtn">Terug</button>
+        <button type="submit" class="btn-checkout" id="placeOrderBtn">Bestelling plaatsen</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Stap 3: bevestiging — BACKEND: vervang door het echte ordernummer uit de API-response -->
+  <div class="cart-step" id="cartStepConfirm" hidden>
+    <div class="cart-confirm">
+      <p class="cart-confirm-icon">✓</p>
+      <h4>Bedankt voor uw bestelling!</h4>
+      <p>Uw bestelnummer is <strong id="confirmOrderId"></strong>.</p>
+      <p class="cart-confirm-note">Dit is een demo-omgeving: er is geen betaling verwerkt en er is geen bestelling verzonden.</p>
+      <button type="button" class="btn-checkout" id="confirmCloseBtn">Verder winkelen</button>
+    </div>
+  </div>
+</div>
 
 <section class="hero" id="top">
   <video autoplay muted loop playsinline poster="https://www.derodeschaar.nl/media/6a/9b/ec/1763043366/208487.jpg?ts=1763043366">
@@ -45,7 +146,7 @@
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>Gratis verzenden</span><span class="dot">•</span><span>Binnen 2 werkdagen klaar</span><span class="dot">•</span><span>Gratis instructie aan huis</span><span class="dot">•</span><span>Gratis halen en brengen</span><span class="dot">•</span><span>Gratis verzenden</span><span class="dot">•</span><span>Binnen 2 werkdagen klaar</span><span class="dot">•</span><span>Gratis instructie aan huis</span><span class="dot">•</span><span>Gratis halen en brengen</span><span class="dot">•</span>
+    <span>Gratis verzenden</span><span class="dot">•</span><span>Binnen 2 werkdagen klaar</span><span class="dot">•</span><span>Gratis instructie aan huis</span><span class="dot">•</span><span>Gratis halen en brengen</span>
   </div>
 </div>
 
@@ -53,10 +154,10 @@
   <section class="section" id="borduur">
     <div class="section-head">
       <div>
-        <h2><span class="swatch swatch-red"></span>Borduurmachines</h2>
+        <h2>Borduurmachines</h2>
         <p class="section-sub">Van uw eerste borduurwerk tot professionele series — machines van BERNINA, PFAFF en Husqvarna.</p>
       </div>
-      <a class="see-all" href="https://www.derodeschaar.nl/nieuwe-machines/naai-en-borduurmachines/" target="_blank" rel="noopener">Bekijk alle borduurmachines</a>
+      <a class="see-all" href="https://www.deruiltdeschaar.nl/nieuwe-machines/naai-en-borduurmachines/" target="_blank" rel="noopener">Bekijk alle borduurmachines</a>
     </div>
     <div class="product-row">
 
@@ -69,6 +170,7 @@
           <h3>BERNINA 990</h3>
           <div class="price-row"><span class="price-now">€ 14.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p1" data-name="BERNINA 990" data-price="€ 14.999,00" data-img="https://www.derodeschaar.nl/media/12/89/d7/1788205970/BERNINA_990_Frontal_SM_Tisch.jpg?ts=1788205970">In winkelwagen</button>
         </div>
       </div>
 
@@ -83,6 +185,7 @@
           <div class="price-row"><span class="price-now">€ 11.999,00</span><span class="price-was">€ 12.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
           <div class="call-note">Bel voor uw korting</div>
+          <button type="button" class="btn-order" data-id="p2" data-name="Creative icon™ 2 — Limited Edition" data-price="€ 11.999,00" data-img="https://www.derodeschaar.nl/media/a9/8f/c0/1763496628/icon2-4.jpg?ts=1763496628">In winkelwagen</button>
         </div>
       </div>
 
@@ -96,6 +199,7 @@
           <h3>Designer Epic™ 3 Nordic Frost</h3>
           <div class="price-row"><span class="price-now">€ 13.994,00</span><span class="price-was">€ 15.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p3" data-name="Designer Epic™ 3 Nordic Frost" data-price="€ 13.994,00" data-img="https://www.derodeschaar.nl/media/ac/3c/60/1774647257/HV_DE3-NordicFrost_PDP_Technical.jpg.webp?ts=1774647257">In winkelwagen</button>
         </div>
       </div>
 
@@ -108,6 +212,7 @@
           <h3>Creative expression™ 750</h3>
           <div class="price-row"><span class="price-now">€ 5.295,00</span><span class="price-was">€ 5.499,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p4" data-name="Creative expression™ 750" data-price="€ 5.295,00" data-img="https://www.derodeschaar.nl/media/1b/aa/fa/1763497368/Pfaff_creativeExpress750_angeledOnWhite.jpg?ts=1763497368">In winkelwagen</button>
         </div>
       </div>
 
@@ -121,6 +226,7 @@
           <div class="price-row"><span class="price-now">€ 8.994,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
           <div class="call-note">Bel voor uw korting</div>
+          <button type="button" class="btn-order" data-id="p5" data-name="Creative performance™ 950" data-price="€ 8.994,00" data-img="https://www.derodeschaar.nl/media/0d/9d/9b/1763499435/icon-with-embroidery_jpg.webp.jpeg?ts=1763499435">In winkelwagen</button>
         </div>
       </div>
 
@@ -134,6 +240,7 @@
           <h3>Creative Elevate 680</h3>
           <div class="price-row"><span class="price-now">€ 2.894,00</span><span class="price-was">€ 2.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p6" data-name="Creative Elevate 680" data-price="€ 2.894,00" data-img="https://www.derodeschaar.nl/media/54/13/77/1774643970/PFAFF-CreativeElevate680.jpg?ts=1774643970">In winkelwagen</button>
         </div>
       </div>
 
@@ -146,6 +253,7 @@
           <h3>Designer Topaz™ 65</h3>
           <div class="price-row"><span class="price-now">€ 3.994,00</span><span class="price-was">€ 4.199,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p7" data-name="Designer Topaz™ 65" data-price="€ 3.994,00" data-img="https://www.derodeschaar.nl/media/1c/69/0e/1762978139/HV_Designer_Topaz_65-5.jpg?ts=1762978139">In winkelwagen</button>
         </div>
       </div>
 
@@ -171,7 +279,7 @@
   <section class="section" id="quilt">
     <div class="section-head">
       <div>
-        <h2><span class="swatch swatch-sage"></span>Quiltmachines</h2>
+        <h2>Quiltmachines</h2>
         <p class="section-sub">Ruimte, precisie en snelheid voor grote quiltprojecten.</p>
       </div>
       <a class="see-all" href="https://www.derodeschaar.nl/nieuwe-machines/quiltmachines/" target="_blank" rel="noopener">Bekijk alle quiltmachines</a>
@@ -188,6 +296,7 @@
           <h3>Performance icon™</h3>
           <div class="price-row"><span class="price-now">€ 5.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p8" data-name="Performance icon™" data-price="€ 5.999,00" data-img="https://www.derodeschaar.nl/media/96/21/10/1761855886/performance-icon-1536x1536.jpg?ts=1761855886">In winkelwagen</button>
         </div>
       </div>
 
@@ -200,6 +309,7 @@
           <h3>Quilt expression™ 725</h3>
           <div class="price-row"><span class="price-now">€ 3.794,00</span><span class="price-was">€ 3.899,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p9" data-name="Quilt expression™ 725" data-price="€ 3.794,00" data-img="https://www.derodeschaar.nl/media/b2/8d/73/1761867895/quilt-expression-725.jpg?ts=1761867895">In winkelwagen</button>
         </div>
       </div>
 
@@ -212,6 +322,7 @@
           <h3>Epic Quilt™ 97</h3>
           <div class="price-row"><span class="price-now">€ 8.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p10" data-name="Epic Quilt™ 97" data-price="€ 8.999,00" data-img="https://www.derodeschaar.nl/media/50/49/9b/1762386538/HV-EpicQuilt97-TechnicalHighResImage-30052024-05.jpg?ts=1762386538">In winkelwagen</button>
         </div>
       </div>
 
@@ -224,6 +335,7 @@
           <h3>Quilt expression™ 720</h3>
           <div class="price-row"><span class="price-now">€ 2.199,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p11" data-name="Quilt expression™ 720" data-price="€ 2.199,00" data-img="https://www.derodeschaar.nl/media/97/aa/79/1763073085/quilt-expression_720.jpg?ts=1763073085">In winkelwagen</button>
         </div>
       </div>
 
@@ -236,6 +348,7 @@
           <h3>Quilt ambition™ 635</h3>
           <div class="price-row"><span class="price-now">€ 1.499,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p12" data-name="Quilt ambition™ 635" data-price="€ 1.499,00" data-img="https://www.derodeschaar.nl/media/6b/8e/0f/1761863489/quilt-ambition-635-03-1.jpg?ts=1761863489">In winkelwagen</button>
         </div>
       </div>
 
@@ -259,7 +372,7 @@
   <section class="section" id="naai">
     <div class="section-head">
       <div>
-        <h2><span class="swatch swatch-brass"></span>Naaimachines</h2>
+        <h2>Naaimachines</h2>
         <p class="section-sub">Voor beginners tot gevorderden — van instapmodel tot naaimachine met vrije arm.</p>
       </div>
       <a class="see-all" href="https://www.derodeschaar.nl/nieuwe-machines/naaimachines/" target="_blank" rel="noopener">Bekijk alle naaimachines</a>
@@ -276,6 +389,7 @@
           <h3>Expression™ 715</h3>
           <div class="price-row"><span class="price-now">€ 3.294,00</span><span class="price-was">€ 3.499,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p13" data-name="Expression™ 715" data-price="€ 3.294,00" data-img="https://www.derodeschaar.nl/media/be/09/09/1761868777/PFAFF_expression_715.jpg?ts=1761868777">In winkelwagen</button>
         </div>
       </div>
 
@@ -288,6 +402,7 @@
           <h3>Expression™ 710 SE</h3>
           <div class="price-row"><span class="price-now">€ 1.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p14" data-name="Expression™ 710 SE" data-price="€ 1.999,00" data-img="https://www.derodeschaar.nl/media/12/8c/57/1761862737/expression-710_SE.jpg?ts=1761862737">In winkelwagen</button>
         </div>
       </div>
 
@@ -300,6 +415,7 @@
           <h3>Ambition™ 620</h3>
           <div class="price-row"><span class="price-now">€ 1.149,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p15" data-name="Ambition™ 620" data-price="€ 1.149,00" data-img="https://www.derodeschaar.nl/media/65/ca/88/1761863949/ambition-620-1-1536x1536.jpg?ts=1761863949">In winkelwagen</button>
         </div>
       </div>
 
@@ -312,6 +428,7 @@
           <h3>Passport™ 2.0</h3>
           <div class="price-row"><span class="price-now">€ 699,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p16" data-name="Passport™ 2.0" data-price="€ 699,00" data-img="https://www.derodeschaar.nl/media/35/d6/32/1761865755/passport-20-1536x1536.jpg?ts=1761865755">In winkelwagen</button>
         </div>
       </div>
 
@@ -324,6 +441,7 @@
           <h3>Select™ 4.2</h3>
           <div class="price-row"><span class="price-now">€ 999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p17" data-name="Select™ 4.2" data-price="€ 999,00" data-img="https://www.derodeschaar.nl/media/98/a5/10/1761864843/select-42-1536x1536.jpg?ts=1761864843">In winkelwagen</button>
         </div>
       </div>
 
@@ -337,6 +455,7 @@
           <h3>Topaz™ 55Q</h3>
           <div class="price-row"><span class="price-now">€ 2.894,00</span><span class="price-was">€ 2.999,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p18" data-name="Topaz™ 55Q" data-price="€ 2.894,00" data-img="https://www.derodeschaar.nl/media/29/1d/3d/1778785075/Husqvarna%201.jpg?ts=1778785075">In winkelwagen</button>
         </div>
       </div>
 
@@ -349,6 +468,7 @@
           <h3>Heavy Duty™ | 6605C</h3>
           <div class="price-row"><span class="price-now">€ 599,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p19" data-name="Heavy Duty™ | 6605C" data-price="€ 599,00" data-img="https://www.derodeschaar.nl/media/17/03/13/1768643308/singer-heavy-duty-6605c-naaimachine.jpg?ts=1768643308">In winkelwagen</button>
         </div>
       </div>
 
@@ -362,6 +482,7 @@
           <h3>Heavy Duty™ | Pink</h3>
           <div class="price-row"><span class="price-now">€ 349,00</span><span class="price-was">€ 399,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p20" data-name="Heavy Duty™ | Pink" data-price="€ 349,00" data-img="https://www.derodeschaar.nl/media/c1/5d/22/1763028973/f535ea6a-aef4-5c48-9d05-bf86f709a0d5.jpeg?ts=1763028973">In winkelwagen</button>
         </div>
       </div>
 
@@ -385,7 +506,7 @@
   <section class="section" id="lock">
     <div class="section-head">
       <div>
-        <h2><span class="swatch swatch-teal"></span>Lockmachines</h2>
+        <h2>Lockmachines</h2>
         <p class="section-sub">Overlock- en coverlockmachines voor een professionele afwerking.</p>
       </div>
       <a class="see-all" href="https://www.derodeschaar.nl/nieuwe-machines/overlock-coverlockmachines/" target="_blank" rel="noopener">Bekijk alle lockmachines</a>
@@ -401,6 +522,7 @@
           <h3>Acclaim</h3>
           <div class="price-row"><span class="price-now">€ 2.198,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p21" data-name="Acclaim" data-price="€ 2.198,00" data-img="https://www.derodeschaar.nl/media/55/98/50/1773171466/baby%20lock%20Acclaim%20front.png?ts=1773171466">In winkelwagen</button>
         </div>
       </div>
 
@@ -414,6 +536,7 @@
           <h3>Admire Air 3000</h3>
           <div class="price-row"><span class="price-now">€ 994,00</span><span class="price-was">€ 1.099,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p22" data-name="Admire Air 3000" data-price="€ 994,00" data-img="https://www.derodeschaar.nl/media/5b/0f/3f/1762376992/Pfaff-admire3000-002.jpg?ts=1762376992">In winkelwagen</button>
         </div>
       </div>
 
@@ -427,6 +550,7 @@
           <h3>Victory</h3>
           <div class="price-row"><span class="price-now">€ 1.498,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p23" data-name="Victory" data-price="€ 1.498,00" data-img="https://www.derodeschaar.nl/media/a1/e0/ab/1773173966/babylock_Victory_Front.jpg?ts=1773173966">In winkelwagen</button>
         </div>
       </div>
 
@@ -440,6 +564,7 @@
           <h3>Amber™ S | 300</h3>
           <div class="price-row"><span class="price-now">€ 994,00</span><span class="price-was">€ 1.099,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p24" data-name="Amber™ S | 300" data-price="€ 994,00" data-img="https://www.derodeschaar.nl/media/cd/bb/0c/1762989405/HV-AmberS300-Serger-5.jpg?ts=1762989405">In winkelwagen</button>
         </div>
       </div>
 
@@ -452,6 +577,7 @@
           <h3>Euphoria</h3>
           <div class="price-row"><span class="price-now">€ 1.998,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p25" data-name="Euphoria" data-price="€ 1.998,00" data-img="https://www.derodeschaar.nl/media/f2/2c/cb/1773170242/euphoria_babylock_coverstich_naehmaschine.png?ts=1773170242">In winkelwagen</button>
         </div>
       </div>
 
@@ -464,6 +590,7 @@
           <h3>Elite™ | SE017</h3>
           <div class="price-row"><span class="price-now">€ 559,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p26" data-name="Elite™ | SE017" data-price="€ 559,00" data-img="https://www.derodeschaar.nl/media/23/7c/f0/1763032055/Elite-SE017-lock-13.jpg?ts=1763032055">In winkelwagen</button>
         </div>
       </div>
 
@@ -476,6 +603,7 @@
           <h3>Enlighten</h3>
           <div class="price-row"><span class="price-now">€ 1.798,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p27" data-name="Enlighten" data-price="€ 1.798,00" data-img="https://www.derodeschaar.nl/media/5d/5d/20/1773172724/enlighten_babylock_overlock_naehmaschine.png?ts=1773172724">In winkelwagen</button>
         </div>
       </div>
 
@@ -488,6 +616,7 @@
           <h3>Admire Air 1000</h3>
           <div class="price-row"><span class="price-now">€ 629,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p28" data-name="Admire Air 1000" data-price="€ 629,00" data-img="https://www.derodeschaar.nl/media/d1/e8/54/1763067392/2021-12-17_12-00-52_b_radius6_smoothing3_.jpg?ts=1763067392">In winkelwagen</button>
         </div>
       </div>
 
@@ -500,6 +629,7 @@
           <h3>Gloria</h3>
           <div class="price-row"><span class="price-now">€ 3.998,00</span></div>
           <div class="ship-note">Gratis verzenden</div>
+          <button type="button" class="btn-order" data-id="p29" data-name="Gloria" data-price="€ 3.998,00" data-img="https://www.derodeschaar.nl/media/41/2d/0a/1773166982/gloria_babylock_coverlock_naehmaschine.jpg?ts=1773166982">In winkelwagen</button>
         </div>
       </div>
 
@@ -562,6 +692,20 @@
   var lastScroll = window.scrollY;
   var threshold = 8;
   function isMobile(){ return window.matchMedia('(max-width: 720px)').matches; }
+
+  var navToggle = document.getElementById('navToggle');
+  var navWrap = document.getElementById('mobile-nav');
+  navToggle.addEventListener('click', function(){
+    var open = navWrap.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  navWrap.addEventListener('click', function(e){
+    if(e.target.tagName === 'A'){
+      navWrap.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
   window.addEventListener('scroll', function(){
     if(!isMobile()){
       header.classList.remove('nav-hidden');
@@ -577,6 +721,283 @@
     }
     lastScroll = current;
   }, {passive:true});
+})();
+</script>
+
+<script>
+/**
+ * Winkelmandje + afrekenen.
+ *
+ * CartStore is de enige plek die de mandje-data leest/schrijft. Nu praat het
+ * met localStorage; zodra er een backend is, vervang je alleen de binnenkant
+ * van deze functies door fetch()-calls naar de API — de rest van de code
+ * (rendering, formulier, stappen) blijft ongewijzigd werken.
+ */
+var CartStore = (function(){
+  var CART_KEY = 'rodeschaar-cart';
+
+  function read(){
+    try{ return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function write(items){
+    try{ localStorage.setItem(CART_KEY, JSON.stringify(items)); }
+    catch(e){}
+  }
+
+  return {
+    getItems: function(){ return read(); },
+    addItem: function(product){
+      var items = read();
+      var existing = items.find(function(i){ return i.id === product.id; });
+      if(existing){
+        existing.qty += 1;
+      } else {
+        items.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          img: product.img,
+          qty: 1
+        });
+      }
+      write(items);
+      return items;
+    },
+    removeItem: function(id){
+      var items = read().filter(function(i){ return i.id !== id; });
+      write(items);
+      return items;
+    },
+    setQty: function(id, qty){
+      var items = read();
+      var item = items.find(function(i){ return i.id === id; });
+      if(item){
+        item.qty = Math.max(1, qty);
+        write(items);
+      }
+      return items;
+    },
+    clear: function(){
+      write([]);
+      return [];
+    }
+  };
+})();
+
+/**
+ * Order plaatsen — BACKEND INTEGRATIEPUNT.
+ * Krijgt de winkelmandje-items en het ingevulde checkout-formulier binnen.
+ * Nu simuleert dit alleen een verwerkingstijd en geeft een lokaal ordernummer
+ * terug. Vervang de body door bijvoorbeeld:
+ *
+ *   return fetch('/api/orders', {
+ *     method: 'POST',
+ *     headers: {'Content-Type': 'application/json'},
+ *     body: JSON.stringify({ items: items, customer: customer })
+ *   }).then(function(res){ return res.json(); }); // { orderId, ... }
+ *
+ * @param {Array} items    - CartStore.getItems() resultaat (id, name, price, img, qty)
+ * @param {Object} customer - form data: email, customerName, phone, address, postcode, city, country, paymentMethod
+ * @returns {Promise<{orderId: string}>}
+ */
+function submitOrder(items, customer){
+  return new Promise(function(resolve){
+    setTimeout(function(){
+      resolve({ orderId: 'DEMO-' + Date.now().toString().slice(-8) });
+    }, 500);
+  });
+}
+
+(function(){
+  function parsePrice(str){
+    var n = parseFloat(String(str).replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',', '.'));
+    return isNaN(n) ? 0 : n;
+  }
+  function formatPrice(n){
+    return n.toLocaleString('nl-NL', {style:'currency', currency:'EUR'});
+  }
+  function cartTotal(items){
+    return items.reduce(function(sum, item){ return sum + parsePrice(item.price) * item.qty; }, 0);
+  }
+  function cartCountOf(items){
+    return items.reduce(function(sum, item){ return sum + item.qty; }, 0);
+  }
+
+  var cartToggle = document.getElementById('cartToggle');
+  var cartCountEl = document.getElementById('cartCount');
+  var cartPanel = document.getElementById('cartPanel');
+  var cartOverlay = document.getElementById('cartOverlay');
+  var cartClose = document.getElementById('cartClose');
+  var cartPanelTitle = document.getElementById('cartPanelTitle');
+  var orderButtons = document.querySelectorAll('.btn-order');
+
+  var stepCart = document.getElementById('cartStepCart');
+  var stepCheckout = document.getElementById('cartStepCheckout');
+  var stepConfirm = document.getElementById('cartStepConfirm');
+
+  var cartItemsEl = document.getElementById('cartItems');
+  var cartEmptyEl = document.getElementById('cartEmpty');
+  var cartFootEl = document.getElementById('cartFoot');
+  var cartTotalEl = document.getElementById('cartTotal');
+  var toCheckoutBtn = document.getElementById('toCheckoutBtn');
+
+  var checkoutForm = document.getElementById('checkoutForm');
+  var checkoutSummaryEl = document.getElementById('checkoutSummary');
+  var toCartBtn = document.getElementById('toCartBtn');
+  var placeOrderBtn = document.getElementById('placeOrderBtn');
+
+  var confirmOrderIdEl = document.getElementById('confirmOrderId');
+  var confirmCloseBtn = document.getElementById('confirmCloseBtn');
+
+  var STEP_TITLES = { cart: 'Winkelmandje', checkout: 'Afrekenen', confirm: 'Besteld' };
+
+  function showStep(step){
+    stepCart.hidden = step !== 'cart';
+    stepCheckout.hidden = step !== 'checkout';
+    stepConfirm.hidden = step !== 'confirm';
+    cartPanelTitle.textContent = STEP_TITLES[step];
+  }
+
+  function updateButtons(items){
+    orderButtons.forEach(function(btn){
+      var id = btn.getAttribute('data-id');
+      var inCart = items.some(function(item){ return item.id === id; });
+      btn.classList.toggle('in-cart', inCart);
+      btn.textContent = inCart ? 'In winkelwagen ✓' : 'In winkelwagen';
+    });
+  }
+
+  function renderCart(){
+    var items = CartStore.getItems();
+    cartItemsEl.innerHTML = '';
+    var hasItems = items.length > 0;
+    cartEmptyEl.hidden = hasItems;
+    cartFootEl.hidden = !hasItems;
+
+    items.forEach(function(item){
+      var row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML =
+        '<img src="' + item.img + '" alt="">' +
+        '<div class="cart-item-info">' +
+          '<span class="cart-item-name">' + item.name + '</span>' +
+          '<span class="cart-item-price">' + item.price + '</span>' +
+          '<div class="cart-item-qty">' +
+            '<button type="button" class="qty-btn" data-action="dec" data-id="' + item.id + '" aria-label="Minder">−</button>' +
+            '<span>' + item.qty + '</span>' +
+            '<button type="button" class="qty-btn" data-action="inc" data-id="' + item.id + '" aria-label="Meer">+</button>' +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="cart-item-remove" data-id="' + item.id + '" aria-label="Verwijderen">&times;</button>';
+      cartItemsEl.appendChild(row);
+    });
+
+    cartTotalEl.textContent = formatPrice(cartTotal(items));
+    cartCountEl.textContent = cartCountOf(items);
+    cartCountEl.hidden = items.length === 0;
+    updateButtons(items);
+  }
+
+  function renderCheckoutSummary(){
+    var items = CartStore.getItems();
+    checkoutSummaryEl.innerHTML = '<h4>Overzicht</h4>' + items.map(function(item){
+      return '<div class="checkout-summary-row"><span>' + item.qty + '× ' + item.name + '</span><span>' +
+        formatPrice(parsePrice(item.price) * item.qty) + '</span></div>';
+    }).join('') + '<div class="checkout-summary-row checkout-summary-total"><span>Totaal</span><span>' +
+      formatPrice(cartTotal(items)) + '</span></div>';
+  }
+
+  function openCart(){
+    showStep('cart');
+    renderCart();
+    cartPanel.classList.add('open');
+    cartOverlay.hidden = false;
+    cartToggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeCart(){
+    cartPanel.classList.remove('open');
+    cartOverlay.hidden = true;
+    cartToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  cartToggle.addEventListener('click', function(){
+    if(cartPanel.classList.contains('open')) closeCart(); else openCart();
+  });
+  cartClose.addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+
+  orderButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-id');
+      var inCart = CartStore.getItems().some(function(item){ return item.id === id; });
+      if(inCart){
+        CartStore.removeItem(id);
+      } else {
+        CartStore.addItem({
+          id: id,
+          name: btn.getAttribute('data-name'),
+          price: btn.getAttribute('data-price'),
+          img: btn.getAttribute('data-img')
+        });
+      }
+      renderCart();
+    });
+  });
+
+  cartItemsEl.addEventListener('click', function(e){
+    var removeBtn = e.target.closest('.cart-item-remove');
+    if(removeBtn){
+      CartStore.removeItem(removeBtn.getAttribute('data-id'));
+      renderCart();
+      return;
+    }
+    var qtyBtn = e.target.closest('.qty-btn');
+    if(qtyBtn){
+      var id = qtyBtn.getAttribute('data-id');
+      var item = CartStore.getItems().find(function(i){ return i.id === id; });
+      if(!item) return;
+      var delta = qtyBtn.getAttribute('data-action') === 'inc' ? 1 : -1;
+      if(item.qty + delta <= 0){
+        CartStore.removeItem(id);
+      } else {
+        CartStore.setQty(id, item.qty + delta);
+      }
+      renderCart();
+    }
+  });
+
+  toCheckoutBtn.addEventListener('click', function(){
+    renderCheckoutSummary();
+    showStep('checkout');
+  });
+  toCartBtn.addEventListener('click', function(){
+    showStep('cart');
+  });
+
+  checkoutForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var formData = new FormData(checkoutForm);
+    var customer = {};
+    formData.forEach(function(value, key){ customer[key] = value; });
+
+    placeOrderBtn.disabled = true;
+    placeOrderBtn.textContent = 'Bezig…';
+
+    submitOrder(CartStore.getItems(), customer).then(function(result){
+      confirmOrderIdEl.textContent = result.orderId;
+      CartStore.clear();
+      renderCart();
+      showStep('confirm');
+      placeOrderBtn.disabled = false;
+      placeOrderBtn.textContent = 'Bestelling plaatsen';
+      checkoutForm.reset();
+    });
+  });
+
+  confirmCloseBtn.addEventListener('click', closeCart);
+
+  renderCart();
 })();
 </script>
 
